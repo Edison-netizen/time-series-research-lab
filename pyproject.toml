@@ -1,0 +1,10 @@
+[project]
+name = "time-series-research-lab"
+version = "0.1.0"
+description = "Research scaffold for time-series forecasting experiments."
+requires-python = ">=3.10"
+dependencies = ["numpy"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
