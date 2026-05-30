@@ -1,33 +1,49 @@
 # Time Series Research Lab
 
-Research-grade scaffold for deep learning experiments on time series.
+Runnable notes and baselines for time-series forecasting.
 
-This repository is a public lab notebook for forecasting baselines, ablation protocol, and reproducible experiment structure. The focus is not chasing leaderboard numbers first. The focus is making each experiment inspectable: data split, normalization, lookback/horizon, seed, metric, and failure mode.
+This repository starts from the boring parts of forecasting research: chronological windows, baseline models, metrics, and experiment notes. If those are sloppy, neural models do not mean much.
 
 ## Scope
 
-- Long-horizon forecasting baselines
-- Multivariate time series preprocessing
+- Naive and moving-average baselines
+- Univariate and multivariate window construction
 - Rolling-window evaluation
-- Seed variance and ablation tracking
-- Clean experiment configs for repeatable runs
+- MAE / MSE / sMAPE metrics
+- Synthetic smoke tests before real datasets
 
 ## Repository Shape
 
 ```text
 configs/          experiment configs
-src/tslab/        small reusable utilities
+scripts/          runnable smoke experiments
+src/tslab/        reusable forecasting utilities
+tests/            stdlib unittest coverage
 docs/             protocol notes and benchmark hygiene
+```
+
+## Quick Smoke Run
+
+```bash
+python scripts/run_synthetic_baseline.py
+python -m unittest discover -s tests
+```
+
+Expected shape:
+
+```text
+model           MAE       MSE       sMAPE
+seasonal_naive  0.2397    0.0580    0.3270
+moving_average  0.5982    0.4825    0.4872
 ```
 
 ## Baseline Queue
 
-| Family | Models |
-|---|---|
-| Linear | DLinear, NLinear |
-| Patch-based | PatchTST |
-| Inception-style | TimesNet |
-| Transformer variants | iTransformer, Informer-style baselines |
+- seasonal naive
+- moving average
+- linear regression baseline
+- DLinear-style decomposition baseline
+- patch-based neural model notes
 
 ## Experiment Contract
 
@@ -41,5 +57,4 @@ Every run should answer:
 
 ## Current Status
 
-The repo starts as a scaffold. Code will be added in small, auditable slices.
-
+Small, auditable code first. Neural models come after the baseline harness is hard to fool.
