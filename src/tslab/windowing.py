@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterator
+from typing import Iterator, Sequence, TypeVar
 
-import numpy as np
+T = TypeVar("T")
 
 
 @dataclass(frozen=True)
@@ -13,15 +13,19 @@ class WindowSpec:
     stride: int = 1
 
 
-def rolling_windows(values: np.ndarray, spec: WindowSpec) -> Iterator[tuple[np.ndarray, np.ndarray]]:
+def rolling_windows(values: Sequence[T], spec: WindowSpec) -> Iterator[tuple[list[T], list[T]]]:
     """Yield chronological input/target windows for time-series forecasting."""
-    if values.ndim == 1:
-        values = values[:, None]
+    if spec.lookback <= 0:
+        raise ValueError("lookback must be positive")
+    if spec.horizon <= 0:
+        raise ValueError("horizon must be positive")
+    if spec.stride <= 0:
+        raise ValueError("stride must be positive")
+
     total = spec.lookback + spec.horizon
     if total > len(values):
         return
 
     for start in range(0, len(values) - total + 1, spec.stride):
         pivot = start + spec.lookback
-        yield values[start:pivot], values[pivot:pivot + spec.horizon]
-
+        yield list(values[start:pivot]), list(values[pivot:pivot + spec.horizon])
