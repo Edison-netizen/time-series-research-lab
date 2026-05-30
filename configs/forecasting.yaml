@@ -1,0 +1,33 @@
+experiment:
+  name: etth1_patch_baseline
+  task: long_horizon_forecasting
+  seed: 42
+
+data:
+  dataset: ETTh1
+  target: OT
+  lookback: 336
+  horizon: 96
+  split: chronological
+  normalize: train_only_standard
+
+model:
+  family: patch_transformer
+  patch_len: 16
+  stride: 8
+  d_model: 128
+  n_layers: 3
+  dropout: 0.1
+
+training:
+  batch_size: 32
+  max_epochs: 20
+  optimizer: adamw
+  learning_rate: 0.0001
+  early_stopping_patience: 5
+
+metrics:
+  - mae
+  - mse
+  - smape
+
